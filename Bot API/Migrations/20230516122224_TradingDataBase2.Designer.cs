@@ -3,6 +3,7 @@ using System;
 using Bot_API.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bot_API.Migrations
 {
     [DbContext(typeof(EF_DataContext))]
-    partial class EF_DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230516122224_TradingDataBase2")]
+    partial class TradingDataBase2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,14 +68,14 @@ namespace Bot_API.Migrations
                     b.ToTable("exchange");
                 });
 
-            modelBuilder.Entity("Bot_API.EfCore.HistoricalDataItems", b =>
+            modelBuilder.Entity("Bot_API.EfCore.HistoricalData", b =>
                 {
-                    b.Property<int>("ItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ItemId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Close")
                         .HasColumnType("numeric")
@@ -81,9 +84,6 @@ namespace Bot_API.Migrations
                     b.Property<decimal>("High")
                         .HasColumnType("numeric")
                         .HasColumnName("high");
-
-                    b.Property<int>("ListId")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("Low")
                         .HasColumnType("numeric")
@@ -108,39 +108,11 @@ namespace Bot_API.Migrations
                     b.Property<int?>("tradingPair")
                         .HasColumnType("integer");
 
-                    b.HasKey("ItemId");
-
-                    b.HasIndex("ListId");
+                    b.HasKey("Id");
 
                     b.HasIndex("tradingPair");
 
-                    b.ToTable("historicaldataitems");
-                });
-
-            modelBuilder.Entity("Bot_API.EfCore.HistoricalDataList", b =>
-                {
-                    b.Property<int>("ListId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ListId"));
-
-                    b.Property<long>("DataSize")
-                        .HasColumnType("bigint")
-                        .HasColumnName("datasize");
-
-                    b.Property<DateTime>("TimeStampEnd")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestampend");
-
-                    b.Property<DateTime>("TimeStampStart")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestampstart");
-
-                    b.HasKey("ListId");
-
-                    b.ToTable("historicalDataList");
+                    b.ToTable("historicalData");
                 });
 
             modelBuilder.Entity("Bot_API.EfCore.Order", b =>
@@ -227,19 +199,11 @@ namespace Bot_API.Migrations
                     b.ToTable("tradingPair");
                 });
 
-            modelBuilder.Entity("Bot_API.EfCore.HistoricalDataItems", b =>
+            modelBuilder.Entity("Bot_API.EfCore.HistoricalData", b =>
                 {
-                    b.HasOne("Bot_API.EfCore.HistoricalDataList", "List")
-                        .WithMany("DataSets")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Bot_API.EfCore.TradingPair", "TradingPair")
                         .WithMany()
                         .HasForeignKey("tradingPair");
-
-                    b.Navigation("List");
 
                     b.Navigation("TradingPair");
                 });
@@ -280,11 +244,6 @@ namespace Bot_API.Migrations
                     b.Navigation("Exchange");
 
                     b.Navigation("QuoteCoin");
-                });
-
-            modelBuilder.Entity("Bot_API.EfCore.HistoricalDataList", b =>
-                {
-                    b.Navigation("DataSets");
                 });
 #pragma warning restore 612, 618
         }
