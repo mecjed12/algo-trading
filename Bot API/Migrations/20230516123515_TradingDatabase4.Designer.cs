@@ -3,6 +3,7 @@ using System;
 using Bot_API.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bot_API.Migrations
 {
     [DbContext(typeof(EF_DataContext))]
-    partial class EF_DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230516123515_TradingDatabase4")]
+    partial class TradingDatabase4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,12 +70,12 @@ namespace Bot_API.Migrations
 
             modelBuilder.Entity("Bot_API.EfCore.HistoricalDataItems", b =>
                 {
-                    b.Property<int>("ItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ItemId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Close")
                         .HasColumnType("numeric")
@@ -108,7 +111,7 @@ namespace Bot_API.Migrations
                     b.Property<int?>("tradingPair")
                         .HasColumnType("integer");
 
-                    b.HasKey("ItemId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ListId");
 
@@ -119,12 +122,12 @@ namespace Bot_API.Migrations
 
             modelBuilder.Entity("Bot_API.EfCore.HistoricalDataList", b =>
                 {
-                    b.Property<int>("ListId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ListId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<long>("DataSize")
                         .HasColumnType("bigint")
@@ -138,7 +141,7 @@ namespace Bot_API.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestampstart");
 
-                    b.HasKey("ListId");
+                    b.HasKey("Id");
 
                     b.ToTable("historicalDataList");
                 });
