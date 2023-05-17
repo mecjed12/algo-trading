@@ -8,22 +8,31 @@ namespace Bot_API.EfCore
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("coinId")]
-        public int CoinId { get; set; }
+        [Column("Tradingpair name")]
+        public string? Name { get; set; }
 
-        [Column("coin")]
-        public Coin? Coin { get; set; }
+        [Column("url_symbol")]
+        public string? UrlSymbol { get; set; }
 
-        [Column("quoteCoinId")]
-        public int QuoteCoinId { get; set; }
+        [Column("Decimal precision for currency")]
+        public decimal BaseDecimalCurrency { get; set; }
 
-        [Column("quoteCoin")]
-        public Coin QuoteCoin { get; set; }
+        [Column("Decimal precision for counter currency")]
+        public decimal CounterDecimalCurrency { get; set; }
 
-        [Column("exchangeId")]
-        public int ExchangeId { get; set; }
+        [Column("Decimal precision for buy/sell orders")]
+        public decimal InstantOrderCounterDecimal { get; set; }
 
-        [Column("exchange")]
-        public Exchange? Exchange { get; set; }
+        [Column("Minum Order")]
+        public int MinimumOrder { get; set; }
+
+        [Column("Trading Engine Status")]
+        public string? TradingEngine { get; set; }
+
+        [Column("Market order status")]
+        public string? OrderStatus { get; set; }
+
+        [Column("Trading pair description")]
+        public string? Description { get; set; }
     }
 }

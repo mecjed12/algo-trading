@@ -46,17 +46,36 @@ namespace Bot_API.Controllers
         }
 
         // DELETE api/<DataController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("botapi/[controller]/delete Historical Dataset{id}")]
+        public async Task<IActionResult> DeleteTheHistoricalData(int id)
         {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _historicalDataService.DeleteTheHistoricalDataSet(id);
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Delete the Dataset Sucessfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("botapi/[controller]/scrap")]
         public async Task<IActionResult> ScrapTheHistoricalData()
         {
-            await _historicalDataService.ScrapTheHIstoricalData();
-            return Ok();
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _historicalDataService.ScrapTheHIstoricalData();
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Collect Complete"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
         }
     }
 }

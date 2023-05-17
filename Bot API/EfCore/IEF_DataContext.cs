@@ -8,7 +8,7 @@ namespace Bot_API.EfCore
         public DbSet<Product> Products { get; set; }
         public DbSet<Coin> Coins { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
-        public DbSet<HistoricalDataList> HistoricalData { get; set; }
+        public DbSet<HistoricalDataList> HistoricalDataList { get; set; }
         public DbSet<TradingPair> TradingPairs { get; set; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -14,7 +14,6 @@ namespace Bot_API.Services
         {
             _context = context;
         }
-
         public class OhlcData
         {
             public string? Pair { get; set; }
@@ -44,18 +43,11 @@ namespace Bot_API.Services
 
         public async Task ScrapTheHIstoricalData()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
-
-            var configuration = builder.Build();
-            var historicalDataFolderPath = configuration["AppSettings:HistoricalDataFolderPath"];
-
             string currencyPair = "btceur";
             string url = $"https://www.bitstamp.net/api/v2/ohlc/{currencyPair}/";
 
             DateTime start = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2020, 1, 1, 23, 59, 59, DateTimeKind.Utc);
+            DateTime end = new DateTime(2020, 2, 1, 23, 59, 59, DateTimeKind.Utc);
 
             List<int> dates = new List<int>();
 
@@ -75,12 +67,12 @@ namespace Bot_API.Services
                     var last = dates[i + 1];
 
                     var parameters = new Dictionary<string, string>
-                {
-                    {"step", "3600"},
-                    {"limit", "10"},
-                    {"start", first.ToString()},
-                    {"end", last.ToString()}
-                };
+                    {
+                        {"step", "3600"},
+                        {"limit", "10"},
+                        {"start", first.ToString()},
+                        {"end", last.ToString()}
+                    };
 
                     var requestUrl = QueryHelpers.AddQueryString(url, parameters);
                     var response = await client.GetAsync(requestUrl);
@@ -98,7 +90,6 @@ namespace Bot_API.Services
                     var dataResponse = JsonConvert.DeserializeObject<DataResponse>(data);
                     var ohlcResponse = dataResponse?.Data;
 
-
                     if (ohlcResponse?.Ohlc == null)
                     {
                         Console.WriteLine($"No data for {first}-{last}");
@@ -109,8 +100,10 @@ namespace Bot_API.Services
                     {
                         ohlcData.Pair = ohlcResponse.Pair;
                     }
+
                     masterData.AddRange(ohlcResponse.Ohlc);
                 }
+
                 var historicalDataList = new HistoricalDataList
                 {
                     TimeStampStart = start,
@@ -131,26 +124,44 @@ namespace Bot_API.Services
 
                 historicalDataList.DataSets = historicalDataItems.ToList();
 
-                _context.HistoricalData.Add(historicalDataList);
+                _context.HistoricalDataList.Add(historicalDataList);
                 await _context.SaveChangesAsync();
             }
-            //Console.WriteLine("Name For the File");
-            //var historicalDatacsv = Console.ReadLine();
-            //var path = Path.Combine(historicalDataFolderPath, historicalDatacsv + ".csv");
+        }
 
-            //using (var writer = new StreamWriter(path))
-            //{
-            //    writer.WriteLine("Pair,Timestamp,Open,High,Low,Close,Volume");
+        public void OutputDataAsCsv( List<OhlcData> masterData)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
 
-            //    foreach (var data in masterData)
-            //    {
-            //        writer.WriteLine($"{data.Pair},{data.Timestamp},{data.Open},{data.High},{data.Low},{data.Close},{data.Volume}");
-            //    }
-            //}
+            var configuration = builder.Build();
+            var historicalDataFolderPath = configuration["AppSettings:HistoricalDataFolderPath"];
 
+            Console.WriteLine("Name For the File");
+            var historicalDatacsv = Console.ReadLine();
+            var path = Path.Combine(historicalDataFolderPath, historicalDatacsv + ".csv");
+
+            using var writer = new StreamWriter(path);
+            writer.WriteLine("Pair,Timestamp,Open,High,Low,Close,Volume");
+
+            foreach (var data in masterData)
+            {
+                writer.WriteLine($"{data.Pair},{data.Timestamp},{data.Open},{data.High},{data.Low},{data.Close},{data.Volume}");
+            }
+        }
+
+        public async Task DeleteTheHistoricalDataSet(int id)
+        {
+            var dataset = _context.HistoricalDataList.Where(o => o.ListId.Equals(id)).FirstOrDefault();
+            if (dataset != null)
+            {
+                 _context.HistoricalDataList.Remove(dataset);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
 
-    
+
 

@@ -17,7 +17,7 @@ namespace Bot_API.DataContext
         //  For the Main project
         public DbSet<Coin> Coins { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
-        public DbSet<HistoricalDataList> HistoricalData { get; set;}
+        public DbSet<HistoricalDataList> HistoricalDataList { get; set;}
         public DbSet<TradingPair> TradingPairs { get; set; } 
 
         public int SaveChanges()

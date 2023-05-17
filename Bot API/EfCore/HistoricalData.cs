@@ -17,7 +17,7 @@ namespace Bot_API.EfCore
         public DateTime TimeStampEnd { get; set;}
 
         [Column("datasize")]
-        public long DataSize { get; set; }
+        public long? DataSize { get; set; }
 
         public virtual ICollection<HistoricalDataItems> DataSets { get; set; }
     }
@@ -31,32 +31,32 @@ namespace Bot_API.EfCore
         public int ItemId { get; set; }
 
         [Column("tradingPairId")]
-        public int TradingPairId { get; set; }
+        public int? TradingPairId { get; set; }
 
         [ForeignKey("tradingPair")]
         public TradingPair? TradingPair { get; set; }
 
         [Column("timeStamp")]
-        public int TimeStamp { get; set; }
+        public int? TimeStamp { get; set; }
 
         [Column("open")]
-        public decimal Open { get; set; }
+        public decimal? Open { get; set; }
 
         [Column("high")]
-        public decimal High { get; set; }
+        public decimal? High { get; set; }
 
         [Column("low")]
-        public decimal Low { get; set; }
+        public decimal? Low { get; set; }
 
         [Column("close")]
-        public decimal Close { get; set; }
+        public decimal? Close { get; set; }
 
         [Column("volume")]
-        public decimal Volume { get; set; }
+        public decimal? Volume { get; set; }
 
         [ForeignKey("listId")]
-        public int ListId { get; set; }
+        public int? ListId { get; set; }
 
-        public virtual HistoricalDataList List { get; set; }
+        public virtual HistoricalDataList? List { get; set; }
     }
 }

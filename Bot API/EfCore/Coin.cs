@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bot_API.EfCore
 {
     [Table("coins")]
     public class Coin
     {
+        [Key]
         [Column("id")]
         public int Id { get; set; }
 
